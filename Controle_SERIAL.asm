@@ -1,0 +1,47 @@
+LED1 BIT P1.0
+LED2 BIT P1.1
+LED3 BIT P1.2
+LED4 BIT P1.3
+
+    ORG 0000H
+    AJMP MAIN
+    ORG 0023H
+    AJMP SER
+
+MAIN:
+    MOV IE,#90H
+    MOV SCON,#50H
+    MOV TMOD,#20H
+    MOV TH1,#0F4H
+    MOV TL1,#0F4H
+    SETB TR1
+    MOV P1,#00H
+    CLR F0
+
+LOOP:
+    JNB F0,LOOP
+    CLR F0
+
+    CJNE A,#'I',TROCA
+    CLR LED2
+    CLR LED4
+    SETB LED1
+    SETB LED3
+    SJMP LOOP
+
+TROCA:
+    CJNE A,#'P',LOOP
+    CLR LED1
+    CLR LED3
+    SETB LED2
+    SETB LED4
+    SJMP LOOP
+
+SER:
+    
+    MOV A,SBUF
+    CLR RI
+    SETB F0
+    RETI
+
+    END
